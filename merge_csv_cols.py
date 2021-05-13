@@ -45,7 +45,6 @@ def merge_cols(csv_file_name, from_col, num_of_cols):
         # Process only if required no. of cols are present
         if (len(row) > from_col):
             new_row = []
-            copy_col_upto = from_col
             tmp_row = row
             index = 0
             for c in tmp_row:
@@ -58,12 +57,12 @@ def merge_cols(csv_file_name, from_col, num_of_cols):
 
             # Check if we need to merge all cols
             m_col  = ""
+            #print (num_of_cols)
             if (num_of_cols == 0):
                 for col in row[from_col:]:
                     # Add this col value to merged col string
                     # Also add a ',' at the end
                     m_col += col + ','
-                    
             else:
                 # Pretty much same as prev logic
                 # Except we wil check if we have reached max col value
@@ -82,21 +81,12 @@ def merge_cols(csv_file_name, from_col, num_of_cols):
             new_row.append(m_col)
 
             # Append any remaining cols outside our merge window
+            # We need to append remaining cols only if num_of_cols != 0
 
-            #Get total no. of cols filled so far
-            # Work around when we are selecting all cols
-            if (num_of_cols == 0):
-                num_of_cols = len(row) - from_col
-
-
-            # Check if there are more cols still remaining
-            cols_filled_len = from_col + num_of_cols
-
-            if (len(row) > cols_filled_len):
-                next_col_index = cols_filled_len
-                
-                #Add remaining cols to new row list
-                new_row.extend(row[next_col_index:])
+            if (num_of_cols != 0):
+                cols_rem = from_col + num_of_cols - 1
+                cols_rem_index = cols_rem + 1
+                new_row.extend(row[cols_rem_index:])
             
             # Finally, copy modified row to original row
             row = new_row
